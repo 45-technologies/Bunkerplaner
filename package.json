@@ -1,0 +1,15 @@
+{
+  "name": "bunkerplaner",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Lokales Planungswerkzeug für Stahlbeton-Schutzräume (Vorbemessung, Mengen, Bauablauf)",
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node tests/planning.test.cjs",
+    "test:browser": "node tests/browser.test.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.56.0"
+  }
+}

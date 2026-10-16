@@ -1,0 +1,21 @@
+# Laufzeitdaten: BGR-Cache, Screenshots, Testartefakte
+.runtime/
+# Python
+__pycache__/
+*.py[cod]
+# Node / Playwright
+node_modules/
+test-results/
+playwright-report/
+# Eigene Projekt- und Exportdateien (enthalten Adresse/Koordinaten)
+*.bunker.json
+# Sicherungen, Editor, Betriebssystem
+*backup*/
+*.bak
+*.orig
+~$*
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini

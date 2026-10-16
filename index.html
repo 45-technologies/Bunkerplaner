@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bunkerplaner</title>
+<link rel="stylesheet" href="vendor/fonts/archivo.css">
+<link rel="stylesheet" href="vendor/leaflet.css">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+<header class="top">
+  <div class="brand" aria-label="Bunkerplaner">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path d="M2 14h28" stroke="currentColor" stroke-width="2"/><path d="M6 14v12h20V14" fill="none" stroke="currentColor" stroke-width="3"/><path d="M5 9l3-3M11 9l3-3M17 9l3-3M23 9l3-3" stroke="currentColor" stroke-width="1.4"/></svg>
+    <span>Bunkerplaner</span>
+  </div>
+  <input id="projectName" class="project-name" aria-label="Projektname" spellcheck="false">
+  <div class="top-actions">
+    <select id="langSel" class="lang-sel" aria-label="Sprache" title="Sprache"><option value="de">Deutsch</option><option value="en">English</option><option value="es">Español</option></select>
+    <span class="sep"></span>
+    <button id="undo" class="btn ghost" title="Rückgängig (Strg+Z)">Rückgängig</button>
+    <button id="redo" class="btn ghost" title="Wiederholen (Strg+Y)">Wiederholen</button>
+    <span class="sep"></span>
+    <button id="newProject" class="btn ghost">Neu</button>
+    <button id="openProject" class="btn ghost">Öffnen</button>
+    <button id="saveProject" class="btn">Speichern</button>
+    <div class="menu">
+      <button id="exportBtn" class="btn" aria-haspopup="true" aria-expanded="false">Export</button>
+      <div id="exportMenu" class="menu-list" hidden>
+        <button data-export="csv">Stückliste als CSV</button>
+        <button data-export="report">Planungsbericht drucken / PDF</button>
+        <button data-export="statik">Statische Berechnung drucken / PDF</button>
+        <button data-export="vergleich">Vergleichspaket für den Tragwerksplaner (CSV)</button>
+        <button data-export="dxf">Systemlinien als DXF</button>
+        <button data-export="ifc">Modell als IFC (BIM)</button>
+        <button data-export="plans">Bewehrungspläne und Biegeliste drucken / PDF</button>
+        <button data-export="biegeliste">Biegeliste als CSV</button>
+        <button data-export="bvbs">Biegeliste als BVBS-Datei (Biegemaschine)</button>
+        <button data-export="json">Projektdatei (JSON)</button>
+      </div>
+    </div>
+    <input id="fileInput" type="file" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<nav class="steps" id="steps" aria-label="Planungsschritte"></nav>
+
+<main class="stage">
+  <div class="stage-bar">
+    <div class="views" role="tablist" id="views">
+      <button role="tab" data-view="plan">Grundriss</button>
+      <button role="tab" data-view="schnitt">Schnitt</button>
+      <button role="tab" data-view="3d">3D</button>
+      <button role="tab" data-view="liste">Stückliste</button>
+      <button role="tab" data-view="einkauf">Einkauf</button>
+      <button role="tab" data-view="gantt">Bauablauf</button>
+    </div>
+    <div class="tools" id="tools"></div>
+  </div>
+  <div class="viewport" id="viewport">
+    <div class="view" id="view-plan"><svg id="planSvg" class="plan-svg" tabindex="0" aria-label="Grundriss"></svg><div id="planHint" class="plan-hint"></div><div id="planEditor" class="plan-editor" hidden></div></div>
+    <div class="view" id="view-schnitt"><svg id="sectionSvg" class="section-svg" aria-label="Schnitt"></svg></div>
+    <div class="view" id="view-3d"><div id="three" class="three"></div><div class="three-ui" id="threeUi"></div></div>
+    <div class="view scroll" id="view-liste"></div>
+    <div class="view scroll" id="view-einkauf"></div>
+    <div class="view" id="view-gantt"><div id="ganttTop" class="gantt-3d"></div><div id="gantt" class="gantt"></div></div>
+  </div>
+</main>
+
+<aside class="panel" id="panel" aria-live="polite"></aside>
+
+<footer class="tafel" id="tafel" aria-label="Kennwerte"></footer>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script src="vendor/three.min.js"></script>
+<script src="vendor/OrbitControls.js"></script>
+<script src="vendor/leaflet.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/i18n-en.js"></script>
+<script src="js/i18n-es.js"></script>
+<script src="js/laender-daten.js"></script>
+<script src="js/feiertage-daten.js"></script>
+<script src="js/laender.js"></script>
+<script src="js/normen-daten.js"></script>
+<script src="js/normen.js"></script>
+<script src="js/geo.js"></script>
+<script src="js/model.js"></script>
+<script src="js/calc-extra.js"></script>
+<script src="js/planning.js"></script>
+<script src="js/fe.js"></script>
+<script src="js/slabs.js"></script>
+<script src="js/lifts.js"></script>
+<script src="js/verify.js"></script>
+<script src="js/haustechnik.js"></script>
+<script src="js/radon-daten.js"></script>
+<script src="js/radon.js"></script>
+<script src="js/wartung-daten.js"></script>
+<script src="js/wartung.js"></script>
+<script src="js/kalender.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/benchmarks.js"></script>
+<script src="js/rebarplans.js"></script>
+<script src="js/statikreport.js"></script>
+<script src="js/vergleich.js"></script>
+<script src="js/bauantrag-daten.js"></script>
+<script src="js/bauantrag.js"></script>
+<script src="js/ifc.js"></script>
+<script src="js/varianten.js"></script>
+<script src="js/plan2d.js"></script>
+<script src="js/section.js"></script>
+<script src="js/view3d.js"></script>
+<script src="js/layouts.js"></script>
+<script src="js/panels.js"></script>
+<script src="js/export.js"></script>
+<script src="js/planning-ui.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
